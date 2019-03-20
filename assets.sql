@@ -1,6 +1,7 @@
 USE master;
 GO
 
+--Check if the database exists, if not then create it.
 IF NOT EXISTS (
   SELECT  database_id
   FROM    [master].[sys].[databases]
@@ -12,15 +13,22 @@ USE ComputerAssets
 GO
 
 -- Rebuild procedures
-IF OBJECT_ID('dbo.GetComputers') IS NOT NULL    DROP PROCEDURE dbo.GetComputers
-IF OBJECT_ID('dbo.InsertComputer') IS NOT NULL  DROP PROCEDURE dbo.InsertComputer
+----------------------------------------------  ------------------------------------
+IF OBJECT_ID('dbo.GetComputers') IS NOT NULL    DROP PROCEDURE dbo.GetComputers;
+IF OBJECT_ID('dbo.InsertComputer') IS NOT NULL  DROP PROCEDURE dbo.InsertComputer;
+IF OBJECT_ID('dbo.InsertModel') IS NOT NULL     DROP PROCEDURE dbo.InsertModel;
+----------------------------------------------  ------------------------------------
 
 --Rebuild tables
-IF OBJECT_ID('dbo.Computers') IS NOT NULL     DROP TABLE dbo.Computers;
-IF OBJECT_ID('dbo.Zones') IS NOT NULL         DROP TABLE dbo.Zones;
-IF OBJECT_ID('dbo.Models') IS NOT NULL        DROP TABLE dbo.Models;
+----------------------------------------------  ------------------------------------
+IF OBJECT_ID('dbo.Computers') IS NOT NULL       DROP TABLE dbo.Computers;
+IF OBJECT_ID('dbo.Zones') IS NOT NULL           DROP TABLE dbo.Zones;
+IF OBJECT_ID('dbo.Models') IS NOT NULL          DROP TABLE dbo.Models;
+----------------------------------------------  ------------------------------------
 GO
 
+--CREATE TABLES AND PROCEDURES--
+------------------------------------------------------------------------------------
 CREATE TABLE dbo.Zones(
   ZoneID      INT IDENTITY(1,1),
   ZoneName    NVARCHAR(20),
@@ -28,11 +36,15 @@ CREATE TABLE dbo.Zones(
   PRIMARY KEY (ZoneID)
 );
 GO
+------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------
 INSERT INTO dbo.Zones
 VALUES      ('Ukjent'), ('Admin'), ('Skole');
 GO
+------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------
 CREATE TABLE dbo.Models(
   ModelID     INT IDENTITY(1,1),
   ModelName   NVARCHAR(20),
@@ -40,7 +52,9 @@ CREATE TABLE dbo.Models(
   PRIMARY KEY (ModelID)
 );
 GO
+------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------
 CREATE TABLE dbo.Computers (
   ComputerID    INT IDENTITY(1,1),
   AssetTag      NVARCHAR(15)  NULL,
@@ -59,7 +73,9 @@ CREATE TABLE dbo.Computers (
   REFERENCES    dbo.Models
 );
 GO
+------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------
 CREATE PROCEDURE dbo.GetComputers
 AS
 SELECT  C.ComputerID,
@@ -75,7 +91,9 @@ JOIN    dbo.Zones AS Z
 JOIN    dbo.Models AS M
         ON C.ModelID = M.ModelID;
 GO
+------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------
 CREATE PROCEDURE dbo.InsertComputer(
   @AssetTag     NVARCHAR(15) = NULL,
   @Serialnumber NVARCHAR(50),
@@ -103,3 +121,14 @@ VALUES (
   @ModelID
 );
 GO
+------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+CREATE PROCEDURE dbo.InsertModel(
+  @ModelName  NVARCHAR(20)
+)
+AS
+INSERT INTO dbo.Models(ModelName)
+VALUES      (@ModelName);
+GO
+------------------------------------------------------------------------------------
