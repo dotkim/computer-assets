@@ -9,7 +9,7 @@ IF NOT EXISTS (
 ) CREATE DATABASE ComputerAssets
 GO
 
-USE ComputerAssets
+USE ComputerAssets;
 GO
 
 -- Rebuild procedures
