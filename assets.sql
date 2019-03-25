@@ -60,6 +60,7 @@ CREATE TABLE dbo.Computers (
   AssetTag      NVARCHAR(15)  NULL,
   Serialnumber  NVARCHAR(50)  NOT NULL,
   MACAdress     NVARCHAR(50)  NOT NULL,
+  BIOSGUID      NVARCHAR(50)  NULL,
   SCCMDate      DATETIME      NULL,
   ZoneID        INT           NOT NULL,
   ModelID       INT           NOT NULL,
